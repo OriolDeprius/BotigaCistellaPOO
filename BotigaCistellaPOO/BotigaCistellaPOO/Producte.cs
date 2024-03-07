@@ -10,10 +10,8 @@
 
         //constructors
         /// <summary>
-        /// Creem el cosntructor buit amb l'iva per defecte de 21% i la quantitat a 0.
+        /// Constructor buit de producte amb iva per defecte a 21% i quantitat a 0.
         /// </summary>
-        /// <param name="iva"></param>
-        /// <param name="quantitat"></param>
         public Producte()
         {
             iva = 21;
@@ -23,8 +21,8 @@
         /// Creem el constructor amb el nom i el preu inicial del producte.
         /// També aprofitem el constructor biut per asignarli el iva i la quantiat de productes.
         /// </summary>
-        /// <param name="nom"></param>
-        /// <param name="preu_incial"></param>
+        /// <param name="parametre nom tipus string"></param>
+        /// <param name="parametre preu_incial tipus double"></param>
         public Producte(string nom, double preu_incial) : this()
         {
             this.nom = nom;
@@ -34,10 +32,10 @@
         /// Creem el constructor complet amb nom, preu inicial, iva i quantatas.
         /// Aprofitem els constructors anteriors per asignarli el nom i el preu inicial.
         /// </summary>
-        /// <param name="nom"></param>
-        /// <param name="preu_sense_iva"></param>
-        /// <param name="iva"></param>
-        /// <param name="quantitat"></param>
+        /// <param name="parametre nom tipus string"></param>
+        /// <param name="parametre preu_sense_iva tipus double"></param>
+        /// <param name="parametre iva tipus double"></param>
+        /// <param name=" parametre quantitat tipus int"></param>
         public Producte(string nom, double preu_sense_iva, double iva, int quantitat) : this(nom, preu_sense_iva)
         {
             this.iva = iva;
@@ -46,8 +44,7 @@
 
         //propietats
         /// <summary>
-        /// Creem les propietats per cada un dels atributs.
-        /// Comprovem que el nom no estigui buit i que el preu, l'iva i la quatitat siguin positius.
+        /// Creem la propietat Nom. Retorna el nom del producte i el modifica verificant que no estigui buit.
         /// </summary>
         public string Nom
         {
@@ -56,11 +53,19 @@
             {
                 do
                 {
+                    if (value == "")
+                    {
+                        Console.Write("El nom no pot ser buit.\nTorna a introduiïr el nom --> ");
+                        value = Console.ReadLine();
+                    }
                     nom = value;
                 }
                 while (value == "");
             }
         }
+        /// <summary>
+        /// Creem la propietat Preu_sense_iva. Retorna el preu sense iva i el modifica verificant que no sigui menor que 0.
+        /// </summary>
         public double Preu_sense_iva
         {
             get { return preu_sense_iva; }
@@ -68,11 +73,19 @@
             {
                 do
                 {
+                    if (value < 0)
+                    {
+                        Console.Write("El preu no pot ser menor que 0.\nTorna a introduiïr el preu --> ");
+                        value = Convert.ToDouble(Console.ReadLine());
+                    }
                     preu_sense_iva = value;
                 }
                 while (value < 0);
             }
         }
+        /// <summary>
+        /// Creem la propietat Iva. Retorna el iva i el modifica verificant que no sigui menor que 0.
+        /// </summary>
         public double Iva
         {
             get { return iva; }
@@ -80,11 +93,19 @@
             {
                 do
                 {
+                    if (value < 0)
+                    {
+                        Console.Write("L'IVA no pot ser menor que 0.\nTorna a introduiïr-lo --> ");
+                        value = Convert.ToDouble(Console.ReadLine());
+                    }
                     iva = value;
                 }
                 while (value < 0);
             }
         }
+        /// <summary>
+        /// Creem la propietat Quantitat. Retorna la quantitat de productes i la modifica verificant que no sigui menor que 0.
+        /// </summary>
         public int Quantitat
         {
             get { return quantitat; }
@@ -92,6 +113,11 @@
             {
                 do
                 {
+                    if (value < 0)
+                    {
+                        Console.Write("La quantitat no pot ser menor que 0.\nTorna a introduiïr-la --> ");
+                        value = Convert.ToInt32(Console.ReadLine());
+                    }
                     quantitat = value;
                 }
                 while (value < 0);
