@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BotigaCistellaPOO
+﻿namespace BotigaCistellaPOO
 {
     internal class Producte
     {
@@ -31,7 +25,7 @@ namespace BotigaCistellaPOO
         /// </summary>
         /// <param name="nom"></param>
         /// <param name="preu_incial"></param>
-        public Producte(string nom, double preu_incial):this()
+        public Producte(string nom, double preu_incial) : this()
         {
             this.nom = nom;
             preu_sense_iva = preu_incial;
@@ -44,13 +38,17 @@ namespace BotigaCistellaPOO
         /// <param name="preu_sense_iva"></param>
         /// <param name="iva"></param>
         /// <param name="quantitat"></param>
-        public Producte(string nom, double preu_sense_iva, double iva, int quantitat): this(nom, preu_sense_iva)
+        public Producte(string nom, double preu_sense_iva, double iva, int quantitat) : this(nom, preu_sense_iva)
         {
             this.iva = iva;
             this.quantitat = quantitat;
         }
-        
+
         //propietats
+        /// <summary>
+        /// Creem les propietats per cada un dels atributs.
+        /// Comprovem que el nom no estigui buit i que el preu, l'iva i la quatitat siguin positius.
+        /// </summary>
         public string Nom
         {
             get { return nom; }
@@ -74,6 +72,40 @@ namespace BotigaCistellaPOO
                 }
                 while (value < 0);
             }
+        }
+        public double Iva
+        {
+            get { return iva; }
+            set
+            {
+                do
+                {
+                    iva = value;
+                }
+                while (value < 0);
+            }
+        }
+        public int Quantitat
+        {
+            get { return quantitat; }
+            set
+            {
+                do
+                {
+                    quantitat = value;
+                }
+                while (value < 0);
+            }
+        }
+
+        //metodes publics
+        public double Preu()
+        {
+            return preu_sense_iva + (preu_sense_iva * iva / 100);
+        }
+        public string ToString()
+        {
+            return "Nom: " + nom + "\nPreu: " + Preu() + "\nQuantitat: " + quantitat;
         }
     }
 }
