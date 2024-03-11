@@ -125,10 +125,18 @@
         }
 
         //metodes publics
+        /// <summary>
+        /// Metode Preu
+        /// </summary>
+        /// <returns>El preu amb iva.</returns>
         public double Preu()
         {
             return preu_sense_iva + (preu_sense_iva * iva / 100);
         }
+        /// <summary>
+        /// Creem el metode ToString
+        /// </summary>
+        /// <returns>Retorna de forma amigable les dades del producte (nom, preu i quantitat)</returns>
         public string ToString()
         {
             return "Nom: " + nom + "\nPreu: " + Preu() + "\nQuantitat: " + quantitat;
