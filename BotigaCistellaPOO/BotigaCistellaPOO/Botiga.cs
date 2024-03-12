@@ -284,11 +284,18 @@
         }
         /// <summary>
         /// Metode per esborrar un producte de l'array de productes mantenint l'ordre.
+        /// Es reaprofita el metode Indexador per buscar el producte a esborrar.
         /// </summary>
         /// <param name="producteEsborrar">parametre tipus Producte</param>
         public void EsborrarProducte(Producte producteEsborrar)
         {
-            
+            int posicioPerBorrar = Indexador(producteEsborrar);
+            if (posicioPerBorrar != -1)
+            {
+                for (int i = posicioPerBorrar; i < nElem - 1; i++)
+                    productes[i] = productes[i + 1];
+                nElem--;
+            }
         }
         /// <summary>
         /// Metode per mostrar els noms i preus amb iva aplicats dels productes de l'array de productes.

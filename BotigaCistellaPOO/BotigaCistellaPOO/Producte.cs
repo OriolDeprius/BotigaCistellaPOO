@@ -21,8 +21,8 @@
         /// Creem el constructor amb el nom i el preu inicial del producte.
         /// També aprofitem el constructor biut per asignarli el iva i la quantiat de productes.
         /// </summary>
-        /// <param name="parametre nom tipus string"></param>
-        /// <param name="parametre preu_incial tipus double"></param>
+        /// <param name="nom">parametre tipus string</param>
+        /// <param name="preu_incial">parametre tipus double</param>
         public Producte(string nom, double preu_incial) : this()
         {
             this.nom = nom;
@@ -32,10 +32,10 @@
         /// Creem el constructor complet amb nom, preu inicial, iva i quantatas.
         /// Aprofitem els constructors anteriors per asignarli el nom i el preu inicial.
         /// </summary>
-        /// <param name="parametre nom tipus string"></param>
-        /// <param name="parametre preu_sense_iva tipus double"></param>
-        /// <param name="parametre iva tipus double"></param>
-        /// <param name=" parametre quantitat tipus int"></param>
+        /// <param name="nom">parametre tipus string</param>
+        /// <param name="preu_sense_iva">parametre tipus double</param>
+        /// <param name="iva">parametre tipus double</param>
+        /// <param name="quantitat">parametre tipus int</param>
         public Producte(string nom, double preu_sense_iva, double iva, int quantitat) : this(nom, preu_sense_iva)
         {
             this.iva = iva;
