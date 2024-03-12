@@ -20,8 +20,8 @@
         /// <summary>
         /// Cosntructor botiga amb nom i nombre de productes. Inicialitzem nElem a 0, el nom de la botiga per paramtre i l'array de productes al nombre de productes.
         /// </summary>
-        /// <param name="parametre nom tipus string"></param>
-        /// <param name="parametre nombreProductes tipus int"></param>
+        /// <param name="nom">parametre tipus string</param>
+        /// <param name="nombreProductes">parametre tipus int</param>
         public Botiga(string nom, int nombreProductes)
         {
             nElem = 0;
@@ -32,8 +32,8 @@
         /// Cconstructor amb nom i array de productes. Inicialitzem el nom de la botiga i l'array de productes al array de productes pasat per parametre.
         /// nElem al nombre d'elements de l'array de productes.
         /// </summary>
-        /// <param name="nom"></param>
-        /// <param name="productes"></param>
+        /// <param name="nom">parametre tipus string</param>
+        /// <param name="productes">parametre tipus Producte</param>
         public Botiga(string nom, Producte[] productes)
         {
             nomBotiga = nom;
@@ -43,7 +43,7 @@
 
         //propietats
         /// <summary>
-        /// Propietat NomBotiga. Retorna el nom de la botiga.
+        /// Propietat NomBotiga. Retorna el nom de la botiga i el modifica.
         /// </summary>
         public string NomBotiga
         {
@@ -87,7 +87,7 @@
         /// <summary>
         /// Metode per buscar un producte a l'array de productes.
         /// </summary>
-        /// <param name="propietat producte tipus Producte"></param>
+        /// <param name="producte">parametre tipus Producte</param>
         /// <returns>retorna la posicio de l'array on es troba el producte o -1 si no s'ha trobat.</returns>
         public int Indexador(Producte producte)
         {
@@ -104,7 +104,7 @@
         /// <summary>
         /// Metode per afegir un producte a l'array de productes.
         /// </summary>
-        /// <param name="parametre producte tipus Producte"></param>
+        /// <param name="producte">parametre tipus Producte</param>
         /// <returns>retorna false si no s'ha pogut afegir i true si s'ha pogut afegir.</returns>
         public bool AfegirProducte(Producte producte)
         {
@@ -120,8 +120,8 @@
         /// <summary>
         /// Metode per afegir un array de productes a l'array de productes. si la botiga esta plena, demana si vols ampliar-la.
         /// </summary>
-        /// <param name="parametre producte tipus array de Producte"></param>
-        /// <returns>retorna si s'ha afegit o noiqwañ.-d'</returns>
+        /// <param name="productesAfegir">parametre  tipus array de Producte</param>
+        /// <returns>retorna si s'ha afegit o no</returns>
         public bool AfegirProducte(Producte[] productesAfegir)
         {
             bool afegits = false;
@@ -162,7 +162,7 @@
         /// <summary>
         /// Redimensiona l'array de productes segons el número pasat per parametre.
         /// </summary>
-        /// <param name="parametre numero tipus int"></param>
+        /// <param name="numero">parametre tipus int</param>
         public void AmpliarBotiga(int numero)
         {
             Array.Resize(ref productes, productes.Length + numero);//es referencia perque modifiqui l'array original i es suma la llargada dels dos arrays perque es redimensioni correctament.
@@ -170,8 +170,8 @@
         /// <summary>
         /// Modifca el preu del producte que ens passen per parametre, si no el troba llença missatge que no s'ha trobat i no modifica res.
         /// </summary>
-        /// <param name="parametre producte (nom) tipus string "></param>
-        /// <param name="parametre preu tipus double"></param>
+        /// <param name="producte">parametre (nom) tipus string</param>
+        /// <param name="preu">parametre tipus double</param>
         /// <returns>retorna true si l'ha trobat i modificat i false si no l'ha trobat.</returns>
         public bool ModificarPreu(string producte, double preu)
         {
@@ -193,7 +193,7 @@
         /// <summary>
         /// Busca el producte a traves del nom.
         /// </summary>
-        /// <param name="parametre producteBuscar tipus Producte"></param>
+        /// <param name="producteBuscar">parametre tipus Producte</param>
         /// <returns>retorna true si l'ha trobat i false si no.</returns>
         public bool BuscarProducte(Producte producteBuscar)
         {
@@ -210,10 +210,10 @@
         /// <summary>
         /// Metode per modificar un producte. busca el producte a traves del nom i modifica el nom, el preu i la quantitat.
         /// </summary>
-        /// <param name="parametre producteModificar tipus Producte"></param>
-        /// <param name="parametre nomNou tipus string"></param>
-        /// <param name="parametre nouPreu tipus double"></param>
-        /// <param name="parametre novaQuantitat tipus int"></param>
+        /// <param name="producteModificar">parametre tipus Producte</param>
+        /// <param name="nomNou">parametre tipus string</param>
+        /// <param name="nouPreu">parametre tipus double</param>
+        /// <param name="novaQuantitat">parametre tipus int</param>
         /// <returns>retorna true si l'ha modificat o fasle si no.</returns>
         public bool ModificarProducte(Producte producteModificar, String nomNou, double nouPreu, int novaQuantitat)
         {
@@ -231,11 +231,90 @@
             return modificat;
         }
         /// <summary>
-        /// Metode per ordenar els productes de l'array de productes.
+        /// Metode per ordenar els productes de l'array de productes per nom. (Quick sort)
         /// </summary>
-        public void OrdenarProductes()
+        /// <param name="p"> parametre tipus Producte[]</param>
+        /// <param name="li">parametre tipus int</param>
+        /// <param name="ls">parametre tipus int</param>
+        public void OrdenarProductes(Producte[] p, int li, int ls)
+        {
+            Producte mig = p[(li + ls) / 2];
+            int i = li;
+            int j = ls;
+            do
+            {
+                while (p[i].Nom.CompareTo(mig.Nom) < 0) i++;
+                while (p[j].Nom.CompareTo(mig.Nom) > 0) j--;
+                if (i <= j)
+                {
+                    (p[i], p[j]) = (p[j], p[i]);
+                    i++;
+                    j--;
+                }
+            }
+            while (i <= j);
+            if(j > li) OrdenarProductes(p, li, j);
+            if(i < ls) OrdenarProductes(p, i, ls);
+        }
+        /// <summary>
+        /// Metode per ordenar els productes de l'array de productes per preu.(Quick sort)
+        /// </summary>
+        /// <param name="p"> parametre tipus Producte[]</param>
+        /// <param name="li">parametre tipus int</param>
+        /// <param name="ls">parametre tipus int</param>
+        public void OrdenarPreus(Producte[] p, int li, int ls)
+        {
+            Producte mig = p[(li + ls) / 2];
+            int i = li;
+            int j = ls;
+            do
+            {
+                while (p[i].Preu() < mig.Preu() && i < ls) i++;
+                while (p[j].Preu() > mig.Preu() && j > ls) j--;
+                if (i <= j)
+                {
+                    (p[i], p[j]) = (p[j], p[i]);
+                    i++;
+                    j--;
+                }
+            }
+            while (i <= j);
+            if (j > li) OrdenarPreus(p, li, j);
+            if (i < ls) OrdenarPreus(p, i, ls);
+        }
+        /// <summary>
+        /// Metode per esborrar un producte de l'array de productes mantenint l'ordre.
+        /// </summary>
+        /// <param name="producteEsborrar">parametre tipus Producte</param>
+        public void EsborrarProducte(Producte producteEsborrar)
         {
             
+        }
+        /// <summary>
+        /// Metode per mostrar els noms i preus amb iva aplicats dels productes de l'array de productes.
+        /// </summary>
+        /// <returns>retorna string</returns>
+        public string Mostrar()
+        {
+            string mostrar = "";
+            for (int i = 0; i < nElem; i++)
+            {
+                mostrar = mostrar + productes[i].Nom + ": " + productes[i].Preu + "\n";
+            }
+            return mostrar;
+        }
+        /// <summary>
+        /// Metode per mostrar els noms, preus, preus sense iva i percentatge d'iva dels productes de l'array de productes.
+        /// </summary>
+        /// <returns>retorna de forma amigable totes les dades de l'array de Productes</returns>
+        public string ToString()
+        {
+            string toStr = "";
+            for (int i = 0; i < nElem; i++)
+            {
+                toStr = toStr + productes[i].Nom + ": " + productes[i].Preu + "\t" + "|" + "\t" + "Preu sense iva: " + productes[i].Preu_sense_iva + "Percentatge d'IVA: " + productes[i].Iva + "\n";
+            }
+            return toStr;
         }
     }
 }
