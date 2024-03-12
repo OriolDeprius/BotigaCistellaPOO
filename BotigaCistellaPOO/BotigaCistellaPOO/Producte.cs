@@ -137,7 +137,7 @@
         /// Creem el metode ToString
         /// </summary>
         /// <returns>Retorna de forma amigable les dades del producte (nom, preu i quantitat)</returns>
-        public string ToString()
+        public override string ToString()
         {
             return "Nom: " + nom + "\nPreu: " + Preu() + "\nQuantitat: " + quantitat;
         }
