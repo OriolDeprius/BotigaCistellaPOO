@@ -47,7 +47,7 @@
         }
         //Constructors
         /// <summary>
-        /// inicialitzem l'array productes a 10, nElem a 0, diners a 0 tmabé i botiga a null.
+        /// s'inicialitza l'array productes a 10, nElem a 0, diners a 0 tmabé i botiga a null.
         /// </summary>
         public Cistella()
         {
@@ -56,6 +56,7 @@
             this.diners = 0;
             this.botiga = null;
         }
+      
         /// <summary>
         /// 
         /// </summary>
@@ -63,6 +64,7 @@
         /// <param name="producte"></param>
         /// <param name="quantitats"></param>
         /// <param name="diner"></param>
+
         public Cistella(string botiga, int producte, int quantitats, double diner)
         {
             Producte[] productes = new Producte[producte];
@@ -75,28 +77,38 @@
 
 
         //Mètodes
-        public double ComprarProducte(Producte producte, int quantitat)
+        public void ComprarProducte(Producte producte, int quantitat)
         {
-            double preu = 0;
-            if (producte.Quantitat >= quantitat)
+           int posicio = 
+            if (Buscar == 1)
             {
-                preu = producte.Preu_sense_iva * (1 + producte.Iva / 100) * quantitat;
-                if (diners >= preu)
-                {
-                    diners -= preu;
-                    producte.Quantitat -= quantitat;
-                    return preu;
-                }
-                else
-                {
-                    return -1;
-                }
+                productes[nElemTaula] = producte;
+                this.quantitat[nElemTaula] = quantitat;
+                nElemTaula++;
             }
             else
             {
-                return -2;
+                Console.WriteLine("No hi ha espai per a més productes");
             }
         }
+        /// <summary>
+        /// Retorna un numero diferent a -1 si ha trobat el producte, si no el troba retorna -1.
+        /// </summary>
+        /// <param name="productes"></param>
+        /// <param name="nElem"></param>
+        /// <param name="nom"></param>
+        /// <returns></returns>
+        public void Buscar(Producte[] productes, int nElem, string nom)
+        {
+            int index = -1;
+            for (int i = 0; i < nElem; i++)
+            {
+                if (productes[i].Nom == nom)
+                    index = i;
+            }
+            return index;
+        }
+
         static int Buscar(string[] productesCistella, int nElemCistella, string nom)
         {
             int index = -1;
@@ -111,6 +123,7 @@
         {
 
         }
+
 
     }
 
