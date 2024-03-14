@@ -55,6 +55,14 @@
             this.diners = 0;
             this.botiga = null;
         }
+      
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="botiga"></param>
+        /// <param name="producte"></param>
+        /// <param name="quantitats"></param>
+        /// <param name="diner"></param>
 
         public Cistella(string botiga, DateTime data, int producte, int quantitats, double diner)
         {
