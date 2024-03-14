@@ -89,12 +89,12 @@
         /// </summary>
         /// <param name="producte">parametre tipus Producte</param>
         /// <returns>retorna la posicio de l'array on es troba el producte o -1 si no s'ha trobat.</returns>
-        public int Indexador(Producte producte)
+        public int Indexador(string nomProducte)
         {
             int index = -1;
             for (int i = 0; i < nElem; i++)
             {
-                if (producte.Nom == productes[i].Nom)
+                if (nomProducte == productes[i].Nom)
                 {
                     index = i;
                 }
@@ -289,7 +289,8 @@
         /// <param name="producteEsborrar">parametre tipus Producte</param>
         public void EsborrarProducte(Producte producteEsborrar)
         {
-            int posicioPerBorrar = Indexador(producteEsborrar);
+            
+            int posicioPerBorrar = Indexador(producteEsborrar.Nom);
             if (posicioPerBorrar != -1)
             {
                 for (int i = posicioPerBorrar; i < nElem - 1; i++)
@@ -306,7 +307,7 @@
             string mostrar = "";
             for (int i = 0; i < nElem; i++)
             {
-                mostrar = mostrar + productes[i].Nom + ": " + productes[i].Preu + "\n";
+                mostrar = $"{i}" + mostrar + productes[i].Nom + ": " + productes[i].Preu + "\n";
             }
             return mostrar;
         }

@@ -60,9 +60,9 @@
         /// 
         /// </summary>
         /// <param name="botiga"></param>
-        /// <param name="productes"></param>
-        /// <param name="quantitat"></param>
-        /// <param name="diners"></param>
+        /// <param name="producte"></param>
+        /// <param name="quantitats"></param>
+        /// <param name="diner"></param>
         public Cistella(string botiga, int producte, int quantitats, double diner)
         {
             Producte[] productes = new Producte[producte];

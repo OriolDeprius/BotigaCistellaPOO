@@ -25,7 +25,7 @@
         /// <param name="preu_incial">parametre tipus double</param>
         public Producte(string nom, double preu_incial) : this()
         {
-            this.nom = nom;
+            this.Nom = nom;
             preu_sense_iva = preu_incial;
         }
         /// <summary>

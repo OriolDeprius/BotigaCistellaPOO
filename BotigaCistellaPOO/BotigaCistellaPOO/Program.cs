@@ -1,4 +1,6 @@
-﻿namespace BotigaCistellaPOO
+﻿using System.Runtime.InteropServices.Marshalling;
+
+namespace BotigaCistellaPOO
 {
     internal class Program
     {
@@ -7,11 +9,18 @@
             char respostaMenuInicial;
             char respostaMenuAdministrarBotiga;
             string contrasenyaIntroduida;
-            string contrasenyaAdmin = "xxx123xxx";
-
+            string contrasenyaAdmin = "xxx123xxx";//contrasenya que s'ha d'introduir per accedir a l'administració de la botiga
+            Botiga botiga = CarregarBotiga();
+            
+            /// <summary>
+            /// bucle que mostra el menú inicial i segons la resposta de l'usuari, crida a un mètode o un altre.
+            /// també controla que la contrasenya sigui correcta per accedir a l'administració de la botiga.
+            /// quan l'usuari vol sortir del programa, el bucle finalitza i acaba el programa.
+            /// es posa la consola en cyan de fons i el text en vermell.
+            /// </summary>
             do
             {
-                Console.BackgroundColor = ConsoleColor.DarkBlue;
+                Console.BackgroundColor = ConsoleColor.Cyan;
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
 
@@ -51,7 +60,7 @@
                                     SwitchBotiga(respostaMenuAdministrarBotiga);
 
                                 if (respostaMenuAdministrarBotiga == '2')
-                                    SwitchProducte(respostaMenuAdministrarBotiga);
+                                    SwitchProducte(respostaMenuAdministrarBotiga, botiga);
                             }
                             else
                             {
@@ -69,6 +78,10 @@
             }
             while (respostaMenuInicial != '0');
         }
+        /// <summary>
+        /// Mètode amb el menú inicial del programa.
+        /// </summary>
+        /// <returns>retorna un string amb el menú inicial del programa.</returns>
         static string MenuInicial()
         {
             string menu = "╔══════════════════════════════════╗\n" +
@@ -82,6 +95,10 @@
                           "╚══════════════════════════════════╝\n";
             return menu;
         }
+        /// <summary>
+        /// metode amb el menu de l'administració de la botiga.
+        /// </summary>
+        /// <returns>retorna un string del menu</returns>
         static string MenuAdministrarBotiga()
         {
             string menu = "╔══════════════════════════════════╗\n" +
@@ -95,6 +112,10 @@
                           "╚══════════════════════════════════╝\n";
             return menu;
         }
+        /// <summary>
+        /// metode per mostrar el menu de l'administracio de botiga.
+        /// </summary>
+        /// <returns></returns>
         static string MenuBotiga()
         {
             string menu = "╔══════════════════════════════════════╗\n" +
@@ -112,6 +133,10 @@
 
             return menu;
         }
+        /// <summary>
+        /// metode amb switch per triar una opcio de l'administracio de la botiga.
+        /// </summary>
+        /// <param name="opcio">parametre tipus char</param>
         static void SwitchBotiga(char opcio)
         {
             Console.Clear();
@@ -139,34 +164,70 @@
         }
         static string MenuProducte()
         {
-            string menu = "╔";
+            string menu = "╔══════════════════════════════════╗\n" +
+                          "║*-*-*-*-*-TRIA UNA OPCIÓ-*-*-*-*-*║\n" +
+                          "╠══════════════════════════════════╣\n" +
+                          "║    1. Modificar Producte         ║\n" +
+                          "║    2. Veure tots els productes   ║\n" +
+                          "╠══════════════════════════════════╣\n" +
+                          "║      TECLA 0 PER ANAR INICI      ║\n" +
+                          "╚══════════════════════════════════╝\n";
 
             return menu;
         }
-        static void SwitchProducte(char opcio)
+        static void SwitchProducte(char opcio, Botiga botiga)
         {
-            Console.Clear();
-            Console.WriteLine(MenuProducte());
-            char respostaMenuProducte = Console.ReadKey().KeyChar;
-            switch (respostaMenuProducte)
+            char respostaMenuProducte;
+            do
             {
-                case '1':
-                    break;
-                case '2':
-                    break;
-                case '3':
-                    break;
-                case '4':
-                    break;
-                case '5':
-                    break;
-                case '6':
-                    break;
-                case '7':
-                    break;
-                case '8':
-                    break;
+                Console.Clear();
+                Console.WriteLine(MenuProducte());
+                respostaMenuProducte = Console.ReadKey().KeyChar;
+                switch (respostaMenuProducte)
+                {
+                    case '1':
+                        Console.Clear();
+                        Console.WriteLine("Tria el producte que vols modificar (numero de linia):");
+                        Console.WriteLine(botiga.Mostrar());
+                        int producteSeleccionat = Convert.ToInt32(Console.ReadLine());
+                        Thread.Sleep(2000);
+                        break;
+                    case '2':
+                        break;
+                    case '0':
+                        Console.Clear();
+                        Console.WriteLine("Tornant al menú principal...");
+                        Thread.Sleep(2000);
+                        break;
+                }
             }
+            while (respostaMenuProducte != '0');
+        } 
+        static Botiga CarregarBotiga()
+        {
+            Botiga botigaAux = new Botiga();
+            botigaAux.Productes = new Producte[10];
+            StreamReader sr = new StreamReader("botiga.csv");
+            sr.ReadLine();
+            string linia = sr.ReadLine();
+            botigaAux.NomBotiga = linia.Split(',')[0];
+            string[] productes = linia.Split(',')[1].Split(';');
+            for (int i = 0; i < productes.Length; i++)
+            {
+                Producte p = new Producte();
+                p.Nom = productes[i].Split(',')[0];
+                p.Preu_sense_iva = Convert.ToDouble(productes[i].Split(';')[1]);
+                p.Iva = Convert.ToDouble(productes[i].Split(';')[2]);
+                p.Quantitat = Convert.ToInt32(productes[i].Split(';')[3]);
+                botigaAux.Productes[i] = p;
+
+                //botigaAux.Productes[i].Nom = productes[i].Split(',')[0];
+                //botigaAux.Productes[i].Preu_sense_iva = Convert.ToDouble(productes[i].Split(';')[1]);
+                //botigaAux.Productes[i].Iva = Convert.ToDouble(productes[i].Split(';')[2]);
+                //botigaAux.Productes[i].Quantitat = Convert.ToInt32(productes[i].Split(';')[3]);
+            }
+            return botigaAux;
         }
+
     }
 }
