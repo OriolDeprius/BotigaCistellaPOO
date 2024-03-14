@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices.Marshalling;
+﻿using System.Net.Http.Headers;
 
 namespace BotigaCistellaPOO
 {
@@ -11,7 +11,8 @@ namespace BotigaCistellaPOO
             string contrasenyaIntroduida;
             string contrasenyaAdmin = "xxx123xxx";//contrasenya que s'ha d'introduir per accedir a l'administració de la botiga
             Botiga botiga = CarregarBotiga();
-            
+            Producte producte = CarregarProducte();
+
             /// <summary>
             /// bucle que mostra el menú inicial i segons la resposta de l'usuari, crida a un mètode o un altre.
             /// també controla que la contrasenya sigui correcta per accedir a l'administració de la botiga.
@@ -52,15 +53,16 @@ namespace BotigaCistellaPOO
                                     Thread.Sleep(1000);
                                     Console.Clear();
                                 }
-
-                                Console.WriteLine(MenuAdministrarBotiga());
-                                respostaMenuAdministrarBotiga = Console.ReadKey().KeyChar;
-
-                                if (respostaMenuAdministrarBotiga == '1')
-                                    SwitchBotiga(respostaMenuAdministrarBotiga);
-
-                                if (respostaMenuAdministrarBotiga == '2')
-                                    SwitchProducte(respostaMenuAdministrarBotiga, botiga);
+                                do
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(MenuAdministrarBotiga());
+                                    respostaMenuAdministrarBotiga = Console.ReadKey().KeyChar;
+                                    if (respostaMenuAdministrarBotiga == '1')
+                                        SwitchBotiga(respostaMenuAdministrarBotiga, botiga, productes);
+                                    if (respostaMenuAdministrarBotiga == '2')
+                                        SwitchProducte(respostaMenuAdministrarBotiga, botiga, productes);
+                                } while (respostaMenuAdministrarBotiga != '0');
                             }
                             else
                             {
@@ -92,6 +94,8 @@ namespace BotigaCistellaPOO
                           "║                                  ║\n" +
                           "║    2.  Administrar Botiga        ║\n" +
                           "║                                  ║\n" +
+                          "╠══════════════════════════════════╣\n" +
+                          "║        0.  Tancar Menú           ║\n" +
                           "╚══════════════════════════════════╝\n";
             return menu;
         }
@@ -109,27 +113,29 @@ namespace BotigaCistellaPOO
                           "║                                  ║\n" +
                           "║          2.  Producte            ║\n" +
                           "║                                  ║\n" +
+                          "╠══════════════════════════════════╣\n" +
+                          "║         0. Tornar enrere         ║\n" +
                           "╚══════════════════════════════════╝\n";
             return menu;
         }
         /// <summary>
         /// metode per mostrar el menu de l'administracio de botiga.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>retorna string del menu Botiga</returns>
         static string MenuBotiga()
         {
             string menu = "╔══════════════════════════════════════╗\n" +
                           "║*-*-*-*-*-*-TRIA UNA OPCIÓ-*-*-*-*-*-*║\n" +
                           "╠══════════════════════════════════════╣\n" +
                           "║                                      ║\n" +
-                          "║  1. Crear Botiga                     ║\n" +
-                          "║  2. Veure Botiga                     ║\n" +
-                          "║  3. Canviar nom Botiga               ║\n" +
-                          "║  4.          ║\n" +
-                          "║  5.                    ║\n" +
-                          "║  6. Ordenar Productes (NOM)          ║\n" +
-                          "║  7. Ordenar Productes (PREU)         ║\n" +
-                          "║  8.     ║\n";
+                          "║  1. Veure Botiga                     ║\n" +
+                          "║  2. Afegir Producte                  ║\n" +
+                          "║  3. Ordenar Productes (NOM)          ║\n" +
+                          "║  4. Ordenar Productes (PREU)         ║\n" +
+                          "║                                      ║\n" +
+                          "╠══════════════════════════════════════╣\n" +
+                          "║          0.  Tornar enrere           ║\n" +
+                          "╚══════════════════════════════════════╝\n";
 
             return menu;
         }
@@ -137,7 +143,7 @@ namespace BotigaCistellaPOO
         /// metode amb switch per triar una opcio de l'administracio de la botiga.
         /// </summary>
         /// <param name="opcio">parametre tipus char</param>
-        static void SwitchBotiga(char opcio)
+        static void SwitchBotiga(char opcio, Botiga botiga, Producte productes)
         {
             Console.Clear();
             Console.WriteLine(MenuBotiga());
@@ -145,20 +151,38 @@ namespace BotigaCistellaPOO
             switch (respostaMenuBotiga)
             {
                 case '1':
+                    Console.Clear();
+                    Console.WriteLine(botiga.ToString());
+                    Console.WriteLine("Prem una tecla per continuar...");
+                    Console.ReadKey();
                     break;
                 case '2':
+                    Console.Clear();
+                    Console.WriteLine("Introdueix el nou producte:");
+                    Console.WriteLine("Nom: ");
+                    string nom = Console.ReadLine();
+                    Console.WriteLine("Preu (sense IVA): ");
+                    double preu = Convert.ToDouble(Console.ReadLine());
+                    Console.WriteLine("IVA: ");
+                    double iva = Convert.ToDouble(Console.ReadLine());
+                    Console.WriteLine("Quantitat: ");
+                    int quantitat = Convert.ToInt32(Console.ReadLine());
+                    Producte p = new Producte(nom, preu, iva, quantitat);
+                    botiga.AfegirProducte(p);
+                    StreamWriter sw = new StreamWriter("botiga.csv");
+                    sw.Write($".{nom};{preu};{iva};{quantitat}");
+                    sw.Close();
                     break;
                 case '3':
+                    Console.Clear();
+                    botiga.OrdenarProductes();
                     break;
                 case '4':
                     break;
-                case '5':
-                    break;
-                case '6':
-                    break;
-                case '7':
-                    break;
-                case '8':
+                case '0':
+                    Console.Clear();
+                    Console.WriteLine("Tornant al menú d'administració...");
+                    Thread.Sleep(2000);
                     break;
             }
         }
@@ -171,10 +195,13 @@ namespace BotigaCistellaPOO
             string menu = "╔══════════════════════════════════╗\n" +
                           "║*-*-*-*-*-TRIA UNA OPCIÓ-*-*-*-*-*║\n" +
                           "╠══════════════════════════════════╣\n" +
+                          "║                                  ║\n" +
                           "║    1. Modificar Producte         ║\n" +
+                          "║                                  ║\n" +
                           "║    2. Veure tots els productes   ║\n" +
+                          "║                                  ║\n" +
                           "╠══════════════════════════════════╣\n" +
-                          "║      TECLA 0 PER ANAR INICI      ║\n" +
+                          "║      0.    Tornar enrere         ║\n" +
                           "╚══════════════════════════════════╝\n";
 
             return menu;
@@ -184,7 +211,7 @@ namespace BotigaCistellaPOO
         /// </summary>
         /// <param name="opcio">tipus char</param>
         /// <param name="botiga"> tipus Botiga</param>
-        static void SwitchProducte(char opcio, Botiga botiga)
+        static void SwitchProducte(char opcio, Botiga botiga, Producte productes)
         {
             char respostaMenuProducte;
             do
@@ -199,16 +226,20 @@ namespace BotigaCistellaPOO
                         ModificarProducte(botiga);
                         break;
                     case '2':
+                        Console.Clear();
+                        Console.WriteLine(productes.ToString());
+                        Console.WriteLine("Prem una tecla per continuar...");
+                        Console.ReadKey();
                         break;
                     case '0':
                         Console.Clear();
-                        Console.WriteLine("Tornant al menú principal...");
+                        Console.WriteLine("Tornant al menú d'administració...");
                         Thread.Sleep(2000);
                         break;
                 }
             }
             while (respostaMenuProducte != '0');
-        } 
+        }
         static void ModificarProducte(Botiga botiga)
         {
             Console.Clear();
@@ -229,28 +260,28 @@ namespace BotigaCistellaPOO
                     Console.Clear();
                     Console.Write("Introdueix el nou nom: ");
                     string nouNom = Console.ReadLine();
-                    botiga.Productes[producteSeleccionat - 1].Nom = nouNom;
+                    botiga.Productes[producteSeleccionat].Nom = nouNom;
                     break;
                 case '2':
                     Console.Clear();
                     Console.Write("Introdueix el nou preu: ");
                     double nouPreu = Convert.ToDouble(Console.ReadLine());
-                    botiga.Productes[producteSeleccionat - 1].Preu_sense_iva = nouPreu;
+                    botiga.Productes[producteSeleccionat].Preu_sense_iva = nouPreu;
                     break;
                 case '3':
                     Console.Clear();
                     Console.Write("Introdueix el nou IVA: ");
                     double nouIva = Convert.ToDouble(Console.ReadLine());
-                    botiga.Productes[producteSeleccionat - 1].Iva = nouIva;
+                    botiga.Productes[producteSeleccionat].Iva = nouIva;
                     break;
                 case '4':
                     Console.Clear();
                     Console.Write("Introdueix la nova quantitat: ");
                     int novaQuantitat = Convert.ToInt32(Console.ReadLine());
-                    botiga.Productes[producteSeleccionat - 1].Quantitat = novaQuantitat;
+                    botiga.Productes[producteSeleccionat].Quantitat = novaQuantitat;
                     break;
             }
-        }   
+        }
         /// <summary>
         /// metode per carregar la botiga.
         /// </summary>
@@ -274,8 +305,21 @@ namespace BotigaCistellaPOO
                 botigaAux.Productes[i] = p;
                 botigaAux.NElem++;
             }
+            sr.Close();
             return botigaAux;
         }
-
+        static Producte CarregarProducte()
+        {
+            //falta persistencia de dades amb arxiu csv pero de moment tenim aixo per provar
+            Producte producteAux = new Producte();
+            StreamReader sr = new StreamReader("producte.csv");
+            sr.ReadLine();
+            string linia = sr.ReadLine();
+            producteAux.Nom = linia.Split(',')[0];
+            producteAux.Preu_sense_iva = Convert.ToDouble(linia.Split(',')[1]);
+            producteAux.Iva = Convert.ToDouble(linia.Split(',')[2]);
+            producteAux.Quantitat = Convert.ToInt32(linia.Split(',')[3]);
+            return producteAux;
+        }
     }
 }

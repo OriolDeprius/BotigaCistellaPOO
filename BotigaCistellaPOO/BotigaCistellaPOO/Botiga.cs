@@ -320,7 +320,7 @@
             string toStr = "";
             for (int i = 0; i < nElem; i++)
             {
-                toStr = toStr + productes[i].Nom + ": " + productes[i].Preu + "\t" + "|" + "\t" + "Preu sense iva: " + productes[i].Preu_sense_iva + "Percentatge d'IVA: " + productes[i].Iva + "\n";
+                toStr = toStr + productes[i].Nom + ": " + productes[i].Preu() + " --> " + "Preu sense iva: " + productes[i].Preu_sense_iva + " Percentatge d'IVA: " + productes[i].Iva + "\n";
             }
             return toStr;
         }

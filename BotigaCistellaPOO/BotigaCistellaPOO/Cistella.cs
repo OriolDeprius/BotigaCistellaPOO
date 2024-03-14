@@ -79,17 +79,17 @@
         //Mètodes
         public void ComprarProducte(Producte producte, int quantitat)
         {
-           int posicio = 
-            if (Buscar == 1)
-            {
-                productes[nElemTaula] = producte;
-                this.quantitat[nElemTaula] = quantitat;
-                nElemTaula++;
-            }
-            else
-            {
-                Console.WriteLine("No hi ha espai per a més productes");
-            }
+           //int posicio = 
+           // if (Buscar == 1)
+           // {
+           //     productes[nElemTaula] = producte;
+           //     this.quantitat[nElemTaula] = quantitat;
+           //     nElemTaula++;
+           // }
+           // else
+           // {
+           //     Console.WriteLine("No hi ha espai per a més productes");
+           // }
         }
         /// <summary>
         /// Retorna un numero diferent a -1 si ha trobat el producte, si no el troba retorna -1.
@@ -98,7 +98,7 @@
         /// <param name="nElem"></param>
         /// <param name="nom"></param>
         /// <returns></returns>
-        public void Buscar(Producte[] productes, int nElem, string nom)
+        public int Buscar(Producte[] productes, int nElem, string nom)
         {
             int index = -1;
             for (int i = 0; i < nElem; i++)
