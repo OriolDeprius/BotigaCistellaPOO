@@ -162,6 +162,10 @@ namespace BotigaCistellaPOO
                     break;
             }
         }
+        /// <summary>
+        /// metode amb el menu de producte.
+        /// </summary>
+        /// <returns>retorna un string amb el menu de producte</returns>
         static string MenuProducte()
         {
             string menu = "╔══════════════════════════════════╗\n" +
@@ -175,6 +179,11 @@ namespace BotigaCistellaPOO
 
             return menu;
         }
+        /// <summary>
+        /// metode amb switch per triar una opcio de l'administracio de producte.
+        /// </summary>
+        /// <param name="opcio">tipus char</param>
+        /// <param name="botiga"> tipus Botiga</param>
         static void SwitchProducte(char opcio, Botiga botiga)
         {
             char respostaMenuProducte;
@@ -187,10 +196,7 @@ namespace BotigaCistellaPOO
                 {
                     case '1':
                         Console.Clear();
-                        Console.WriteLine("Tria el producte que vols modificar (numero de linia):");
-                        Console.WriteLine(botiga.Mostrar());
-                        int producteSeleccionat = Convert.ToInt32(Console.ReadLine());
-                        Thread.Sleep(2000);
+                        ModificarProducte(botiga);
                         break;
                     case '2':
                         break;
@@ -203,6 +209,52 @@ namespace BotigaCistellaPOO
             }
             while (respostaMenuProducte != '0');
         } 
+        static void ModificarProducte(Botiga botiga)
+        {
+            Console.Clear();
+            Console.WriteLine("Tria el producte que vols modificar (numero de linia):");
+            Console.WriteLine(botiga.Mostrar());
+            int producteSeleccionat = Convert.ToInt32(Console.ReadLine());
+            Thread.Sleep(2000);
+            Console.Clear();
+            Console.WriteLine("Quin camp vols modificar?");
+            Console.WriteLine("1. Nom");
+            Console.WriteLine("2. Preu");
+            Console.WriteLine("3. IVA");
+            Console.WriteLine("4. Quantitat");
+            char campSeleccionat = Console.ReadKey().KeyChar;
+            switch (campSeleccionat)
+            {
+                case '1':
+                    Console.Clear();
+                    Console.Write("Introdueix el nou nom: ");
+                    string nouNom = Console.ReadLine();
+                    botiga.Productes[producteSeleccionat - 1].Nom = nouNom;
+                    break;
+                case '2':
+                    Console.Clear();
+                    Console.Write("Introdueix el nou preu: ");
+                    double nouPreu = Convert.ToDouble(Console.ReadLine());
+                    botiga.Productes[producteSeleccionat - 1].Preu_sense_iva = nouPreu;
+                    break;
+                case '3':
+                    Console.Clear();
+                    Console.Write("Introdueix el nou IVA: ");
+                    double nouIva = Convert.ToDouble(Console.ReadLine());
+                    botiga.Productes[producteSeleccionat - 1].Iva = nouIva;
+                    break;
+                case '4':
+                    Console.Clear();
+                    Console.Write("Introdueix la nova quantitat: ");
+                    int novaQuantitat = Convert.ToInt32(Console.ReadLine());
+                    botiga.Productes[producteSeleccionat - 1].Quantitat = novaQuantitat;
+                    break;
+            }
+        }   
+        /// <summary>
+        /// metode per carregar la botiga.
+        /// </summary>
+        /// <returns>retorna una botiga creada en base a arxiu</returns>
         static Botiga CarregarBotiga()
         {
             Botiga botigaAux = new Botiga();
@@ -211,20 +263,16 @@ namespace BotigaCistellaPOO
             sr.ReadLine();
             string linia = sr.ReadLine();
             botigaAux.NomBotiga = linia.Split(',')[0];
-            string[] productes = linia.Split(',')[1].Split(';');
+            string[] productes = linia.Split(',')[1].Split('.');
             for (int i = 0; i < productes.Length; i++)
             {
                 Producte p = new Producte();
-                p.Nom = productes[i].Split(',')[0];
+                p.Nom = productes[i].Split(';')[0];
                 p.Preu_sense_iva = Convert.ToDouble(productes[i].Split(';')[1]);
                 p.Iva = Convert.ToDouble(productes[i].Split(';')[2]);
                 p.Quantitat = Convert.ToInt32(productes[i].Split(';')[3]);
                 botigaAux.Productes[i] = p;
-
-                //botigaAux.Productes[i].Nom = productes[i].Split(',')[0];
-                //botigaAux.Productes[i].Preu_sense_iva = Convert.ToDouble(productes[i].Split(';')[1]);
-                //botigaAux.Productes[i].Iva = Convert.ToDouble(productes[i].Split(';')[2]);
-                //botigaAux.Productes[i].Quantitat = Convert.ToInt32(productes[i].Split(';')[3]);
+                botigaAux.NElem++;
             }
             return botigaAux;
         }

@@ -307,7 +307,7 @@
             string mostrar = "";
             for (int i = 0; i < nElem; i++)
             {
-                mostrar = $"{i}" + mostrar + productes[i].Nom + ": " + productes[i].Preu + "\n";
+                mostrar =  mostrar + $"{i}- " + productes[i].Nom + ": " + productes[i].Preu() + "\n";
             }
             return mostrar;
         }
