@@ -6,7 +6,6 @@
         private string botiga;
         private DateTime data;
         private Producte[] productes;
-        private int[] quantitat;
         private int nElemTaula;
         private double diners;
 
@@ -57,8 +56,10 @@
             this.botiga = null;
         }
 
-        public Cistella(string botiga, int producte, int quantitats, double diner)
+        public Cistella(string botiga, DateTime data, int producte, int quantitats, double diner)
         {
+            this.botiga = botiga;
+            this.data = DateTime.Now;
             Producte[] productes = new Producte[producte];
             //ens hem d’assegurar que tenen la mateixa mida i
             //assignar - li aquesta mida a nElements, hem de comprovar que tenim suficients diners per
@@ -69,19 +70,20 @@
 
 
         //Mètodes
-        public void ComprarProducte(Producte producte, int quantitat)
+        public void ComprarProducte(Producte producte, Producte quantitat, double diners)
         {
-           int posicio = 
-            if (Buscar == 1)
+            //Si tenim suficients diners, afegim el producte a la cistella i restem els diners.
+            if (diners >= producte * Producte.quantitat)
             {
                 productes[nElemTaula] = producte;
-                this.quantitat[nElemTaula] = quantitat;
                 nElemTaula++;
+                diners -= producte * Producte.quantitat;
             }
             else
             {
-                Console.WriteLine("No hi ha espai per a més productes");
+                Console.WriteLine("No tens suficients diners");
             }
+
         }
         /// <summary>
         /// Retorna un numero diferent a -1 si ha trobat el producte, si no el troba retorna -1.
