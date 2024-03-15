@@ -3,22 +3,23 @@
     internal class Cistella
     {
         //Atributs
-        private string botiga;
+        private Botiga botiga;
         private DateTime data;
-        private Producte[] productes;
+        private Producte[] productesCistella;
         private int nElemTaula;
         private double diners;
+        //private string preu;
 
         //Propietats
         /// <summary>
         /// Te el get i set de l'atribut producte, 
         /// </summary>
-        public Producte[] Productes
+        public Producte[] ProductesCistella
         {
-            get { return productes; }
+            get { return productesCistella; }
             set
             {
-                this.productes = value;
+                this.productesCistella = value;
             }
         }
         /// <summary>
@@ -44,18 +45,24 @@
             get { return data; }
             set { data = value; }
         }
+        public Botiga Botiga
+        {
+            get { return botiga; }
+            set { botiga = value; }
+        }
+        
         //Constructors
         /// <summary>
         /// s'inicialitza l'array productes a 10, nElem a 0, diners a 0 tmabé i botiga a null.
         /// </summary>
         public Cistella()
         {
-            this.productes = new Producte[10];
+            botiga = new Botiga();
+            this.productesCistella = new Producte[10];
             this.nElemTaula = 0;
             this.diners = 0;
-            this.botiga = null;
         }
-      
+
         /// <summary>
         /// 
         /// </summary>
@@ -64,7 +71,7 @@
         /// <param name="quantitats"></param>
         /// <param name="diner"></param>
 
-        public Cistella(string botiga, DateTime data, int producte, int quantitats, double diner)
+        public Cistella(Botiga botiga, DateTime data, int producte, int quantitats, double diner)
         {
             this.botiga = botiga;
             this.data = DateTime.Now;
@@ -78,20 +85,9 @@
 
 
         //Mètodes
-        public void ComprarProducte(Producte producte, Producte quantitat, double diners)
+        public void ComprarProducte(Producte producte, int quantitat)
         {
-            //Si tenim suficients diners, afegim el producte a la cistella i restem els diners.
-            if (diners >= producte * Producte.quantitat)
-            {
-                productes[nElemTaula] = producte;
-                nElemTaula++;
-                diners -= producte * Producte.quantitat;
-            }
-            else
-            {
-                Console.WriteLine("No tens suficients diners");
-            }
-
+            botiga.Productes[n].Nom = producte.Nom;
         }
         /// <summary>
         /// Retorna un numero diferent a -1 si ha trobat el producte, si no el troba retorna -1.
@@ -100,7 +96,7 @@
         /// <param name="nElem"></param>
         /// <param name="nom"></param>
         /// <returns></returns>
-        public void Buscar(Producte[] productes, int nElem, string nom)
+        public int Buscar(Producte[] productes, int nElem, string nom)
         {
             int index = -1;
             for (int i = 0; i < nElem; i++)
@@ -110,24 +106,55 @@
             }
             return index;
         }
-
-        static int Buscar(string[] productesCistella, int nElemCistella, string nom)
+        /// <summary>
+        /// Ordena la cistella per ordreq alfabetic.
+        /// </summary>
+        /// <param name="Cistella"></param>
+        /// <param name="nElemTaula"></param>
+        public void OrdenarCistella(Producte[] productes, int nElemTaula)
         {
-            int index = -1;
-            for (int i = 0; i < nElemCistella; i++)
+            for (int numVolta = 0; numVolta < nElemTaula - 1; numVolta++)
             {
-                if (productesCistella[i] == nom)
-                    index = i;
+                for (int i = 0; i < nElemTaula - 1; i++)
+                {
+                    if (productes[i].Nom.CompareTo(productes[i + 1].Nom) > 0)
+                    {
+                        Producte aux = productes[i];
+                        productes[i] = productes[i + 1];
+                        productes[i + 1] = aux;
+                    }
+
+                }
             }
-            return index;
         }
-        public void ComprarProducte(Producte producte, int quantitat, double preu)
+        /// <summary>
+        /// Mostra el tiquet de compra amb la data de la compra, els productes, el preu unitari i el preu total.
+        /// </summary>
+        /// <returns></returns>
+        public string Mostrar()
         {
-
+            return "Botiga: " + botiga + "\nData de la compra: " + Data + "\nProductes: " + productesCistella + "\nPreu Unitari: " + preu + "\nPreu Total: " + preutotal;
         }
-
-
+        /// <summary>
+        /// Retorna el preu total de la cistella amb iva.
+        /// </summary>
+        /// <returns></returns>
+        public double CostTotal()
+        {
+            
+        }
+        /// <summary>
+        /// Mostra el ticket de compra amb un string
+        /// </summary>
+        /// <returns></returns>
+        public string ToString()
+        {
+            string toStr = "";
+            for (int i = 0; i < nElemTaula; i++)
+            {
+                toStr = toStr + productesCistella[i].Nom + ": " + productesCistella[i].Preu + "\t" + "|" + "\t" + "Preu sense iva: " + productesCistella[i].Preu_sense_iva + "Percentatge d'IVA: " + productesCistella[i].Iva + "\n";
+            }
+            return toStr;
+        }
     }
-
-
 }
