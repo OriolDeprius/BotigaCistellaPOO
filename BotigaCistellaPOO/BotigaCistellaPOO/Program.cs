@@ -59,9 +59,9 @@ namespace BotigaCistellaPOO
                                     Console.WriteLine(MenuAdministrarBotiga());
                                     respostaMenuAdministrarBotiga = Console.ReadKey().KeyChar;
                                     if (respostaMenuAdministrarBotiga == '1')
-                                        SwitchBotiga(respostaMenuAdministrarBotiga, botiga, productes);
+                                        SwitchBotiga(respostaMenuAdministrarBotiga, botiga, botiga.Productes);
                                     if (respostaMenuAdministrarBotiga == '2')
-                                        SwitchProducte(respostaMenuAdministrarBotiga, botiga, productes);
+                                        SwitchProducte(respostaMenuAdministrarBotiga, botiga, producte);
                                 } while (respostaMenuAdministrarBotiga != '0');
                             }
                             else
@@ -143,7 +143,7 @@ namespace BotigaCistellaPOO
         /// metode amb switch per triar una opcio de l'administracio de la botiga.
         /// </summary>
         /// <param name="opcio">parametre tipus char</param>
-        static void SwitchBotiga(char opcio, Botiga botiga, Producte productes)
+        static void SwitchBotiga(char opcio, Botiga botiga, Producte[] productes)
         {
             Console.Clear();
             Console.WriteLine(MenuBotiga());
@@ -169,15 +169,26 @@ namespace BotigaCistellaPOO
                     int quantitat = Convert.ToInt32(Console.ReadLine());
                     Producte p = new Producte(nom, preu, iva, quantitat);
                     botiga.AfegirProducte(p);
-                    StreamWriter sw = new StreamWriter("botiga.csv");
+                    StreamWriter sw = new StreamWriter("botiga.csv", true);
                     sw.Write($".{nom};{preu};{iva};{quantitat}");
                     sw.Close();
+                    StreamWriter sw2 = new StreamWriter("producte.csv", true);
+                    sw2.WriteLine($"{nom},{preu},{iva},{quantitat}");
+                    sw2.Close();
                     break;
                 case '3':
                     Console.Clear();
-                    botiga.OrdenarProductes();
+                    botiga.OrdenarProductes(botiga.Productes, 0, botiga.NElem - 1);
+                    Console.WriteLine(botiga.ToString());
+                    Console.WriteLine("Prem una tecla per continuar...");
+                    Console.ReadKey();
                     break;
                 case '4':
+                    Console.Clear();
+                    botiga.OrdenarPreus(botiga.Productes, 0, botiga.NElem -1);
+                    Console.WriteLine(botiga.ToString());
+                    Console.WriteLine("Prem una tecla per continuar...");
+                    Console.ReadKey();
                     break;
                 case '0':
                     Console.Clear();
@@ -240,6 +251,10 @@ namespace BotigaCistellaPOO
             }
             while (respostaMenuProducte != '0');
         }
+        /// <summary>
+        /// metode per modificar el producte.
+        /// </summary>
+        /// <param name="botiga">tipus Botiga</param>
         static void ModificarProducte(Botiga botiga)
         {
             Console.Clear();
@@ -254,6 +269,7 @@ namespace BotigaCistellaPOO
             Console.WriteLine("3. IVA");
             Console.WriteLine("4. Quantitat");
             char campSeleccionat = Console.ReadKey().KeyChar;
+            //falta modificar el producte en el fitxer csv
             switch (campSeleccionat)
             {
                 case '1':
@@ -288,13 +304,21 @@ namespace BotigaCistellaPOO
         /// <returns>retorna una botiga creada en base a arxiu</returns>
         static Botiga CarregarBotiga()
         {
+            //creem botiga amb constructor buit
             Botiga botigaAux = new Botiga();
+            //asignem els productes a la botiga amb array de productes
             botigaAux.Productes = new Producte[10];
+            //llegim el fitxer botiga.csv
             StreamReader sr = new StreamReader("botiga.csv");
+            //saltem la primera linia que conté quins són els camps
             sr.ReadLine();
+            //llegim la segona linia que conté les dades
             string linia = sr.ReadLine();
+            //separem el nom de la botiga dels productes
             botigaAux.NomBotiga = linia.Split(',')[0];
+            //separem els productes per punts
             string[] productes = linia.Split(',')[1].Split('.');
+            //recorrem l'array de productes i cada camp del producte separat per ;. cada producte recorregut fem nElem++
             for (int i = 0; i < productes.Length; i++)
             {
                 Producte p = new Producte();
@@ -308,9 +332,13 @@ namespace BotigaCistellaPOO
             sr.Close();
             return botigaAux;
         }
+        /// <summary>
+        /// metode per carregar el producte.
+        /// </summary>
+        /// <returns>retorna un Producte creat amb arxiu csv</returns>
         static Producte CarregarProducte()
         {
-            //falta persistencia de dades amb arxiu csv pero de moment tenim aixo per provar
+            //nomes llegeix el primer producte del fitxer producte.csv
             Producte producteAux = new Producte();
             StreamReader sr = new StreamReader("producte.csv");
             sr.ReadLine();
@@ -319,7 +347,23 @@ namespace BotigaCistellaPOO
             producteAux.Preu_sense_iva = Convert.ToDouble(linia.Split(',')[1]);
             producteAux.Iva = Convert.ToDouble(linia.Split(',')[2]);
             producteAux.Quantitat = Convert.ToInt32(linia.Split(',')[3]);
+            sr.Close();
             return producteAux;
+
+            /*Producte producteAux = new Producte();
+            StreamReader sr = new StreamReader("producte.csv");
+            sr.ReadLine();
+            string linia = sr.ReadLine();
+            while (!sr.EndOfStream)
+            {
+                producteAux.Nom = linia.Split(',')[0];
+                producteAux.Preu_sense_iva = Convert.ToDouble(linia.Split(',')[1]);
+                producteAux.Iva = Convert.ToDouble(linia.Split(',')[2]);
+                producteAux.Quantitat = Convert.ToInt32(linia.Split(',')[3]);
+
+            }
+            sr.Close();
+            return producteAux;*/
         }
     }
 }
